@@ -70,6 +70,7 @@ export interface ResultValues {
   rating?: number;
   price?: string | Array<string>;
   originalPrice?: string | Array<string>;
+  quantity?: string | Array<string>;
 }
 
 type Field = ((data: Record<string, any>) => any) | string | string[] | false;
@@ -94,6 +95,8 @@ export class FieldDictionary {
 
   rating?: Field;
 
+  quantity?: Field;
+
   constructor(input?: FieldDictionary) {
     const {
       id = '_id',
@@ -105,6 +108,7 @@ export class FieldDictionary {
       price = 'price',
       originalPrice = 'originalPrice',
       rating = 'rating',
+      quantity = 'quantity',
     } = input ?? {};
 
     this.id = id;
@@ -116,5 +120,6 @@ export class FieldDictionary {
     this.price = price;
     this.originalPrice = originalPrice;
     this.rating = rating;
+    this.quantity = quantity;
   }
 }
