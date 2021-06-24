@@ -6,10 +6,13 @@ import {
   formatPrice,
   getStylesObject,
   isArray,
+  isEmptyObject,
+  isNullOrUndefined,
   isNumber,
   isString,
   isValidURL,
 } from '@sajari/react-sdk-utils';
+import Handlebars from 'handlebars';
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -37,6 +40,7 @@ const Result = React.memo(
       onClick: onClickProp,
       styles: stylesProp,
       showImage: showImageProp = true,
+      template,
       ...rest
     } = props;
     const { t } = useTranslation('result');
@@ -200,6 +204,16 @@ const Result = React.memo(
     };
 
     const showImage = showImageProp && (isValidURL(imageSrc, true) || forceImage);
+
+    if (!isNullOrUndefined(template) && !isEmptyObject(template)) {
+      try {
+        const handlebarTemplate = Handlebars.compile(template.html);
+        const rendered = handlebarTemplate(values);
+        return <div dangerouslySetInnerHTML={{ __html: rendered }} />;
+      } catch (error) {
+        return null;
+      }
+    }
 
     return (
       <Box as="article" {...rest} css={[styles.container, stylesProp]}>
